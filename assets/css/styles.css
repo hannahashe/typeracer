@@ -42,8 +42,9 @@ header {
 
 /* Typing highlight states */
 .word-correct {
-  color: #198754; /* Bootstrap success */
+  color: #25a4f3;
 }
 .word-incorrect {
-  color: #dc3545; /* Bootstrap danger */
+  color: #dc3545;
 }
+
