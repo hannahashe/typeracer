@@ -109,6 +109,38 @@ function updateTimerDisplay() {
   liveTimerEl.textContent = `${(elapsedMs / 1000).toFixed(2)}s`;
 }
 
+/** Escapes HTML entities to safely render user-visible text. */
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/**
+ * Renders the prompt with word-by-word highlighting based on current input.
+ * - Correct words -> .word-correct
+ * - Incorrect words -> .word-incorrect
+ */
+function renderPromptHighlight(typedText) {
+  const promptWords = currentPrompt.split(/\s+/);
+  const typedWords = typedText.length ? typedText.split(/\s+/) : [];
+
+  const highlighted = promptWords.map((word, idx) => {
+    let cls = "";
+    if (idx < typedWords.length) {
+      cls = typedWords[idx] === word ? "word-correct" : "word-incorrect";
+    }
+    const safe = escapeHtml(word);
+    return cls ? `<span class="${cls}">${safe}</span>` : safe;
+  });
+
+  // Join with spaces to preserve original spacing semantics
+  promptTextEl.innerHTML = highlighted.join(" ");
+}
+
 /**
  * Calculates typing statistics:
  * - WPM: words typed divided by elapsed minutes (rounded)
@@ -178,7 +210,7 @@ function startTest() {
   resetTimer();
   resetResults();
   currentPrompt = pickPrompt();
-  promptTextEl.textContent = currentPrompt;
+  renderPromptHighlight("");
   inputEl.value = "";
   inputEl.disabled = false;
   inputEl.focus();
@@ -187,14 +219,11 @@ function startTest() {
 
 /**
  * Handles typing input: starts timer on first input and auto-completes
- * when the typed text exactly matches the current prompt.
+ * live highlighting for correct/incorrect words.
  */
 function handleInput() {
   startTimerIfNeeded();
-  if (!hasStartedTyping) return;
-  if (inputEl.value.trim() === currentPrompt.trim()) {
-    stopTest("completed");
-  }
+  renderPromptHighlight(inputEl.value);
 }
 
 // Event wiring: dropdown mode selection and control buttons
@@ -209,6 +238,14 @@ startBtn.addEventListener("click", startTest);
 stopBtn.addEventListener("click", () => stopTest("stopped"));
 retryBtn.addEventListener("click", startTest);
 inputEl.addEventListener("input", handleInput);
+
+// Pressing Enter ends the test (prevents newline in textarea)
+inputEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    stopTest("completed");
+  }
+});
 
 // Initial setup: select default mode, clear results, set helper text
 setMode(currentMode);

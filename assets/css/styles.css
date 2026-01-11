@@ -39,3 +39,11 @@ header {
   border-color: #ff8400;
   color: #ffffff;
 }
+
+/* Typing highlight states */
+.word-correct {
+  color: #198754; /* Bootstrap success */
+}
+.word-incorrect {
+  color: #dc3545; /* Bootstrap danger */
+}
