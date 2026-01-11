@@ -56,32 +56,52 @@
                 <span class="text-uppercase text-muted fw-semibold small"
                   >Mode</span
                 >
-                <div
-                  class="btn-group"
-                  role="group"
-                  aria-label="Difficulty modes"
-                >
+                <div class="dropdown">
                   <button
+                    class="btn btn-outline-secondary dropdown-toggle"
                     type="button"
-                    class="btn btn-outline-secondary active"
+                    id="modeDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
-                    Easy
+                    Select mode
                   </button>
-                  <button type="button" class="btn btn-outline-secondary">
-                    Medium
-                  </button>
-                  <button type="button" class="btn btn-outline-secondary">
-                    Hard
-                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="modeDropdown">
+                    <li>
+                      <button class="dropdown-item active" data-mode="easy">
+                        Easy
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" data-mode="medium">
+                        Medium
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" data-mode="hard">
+                        Hard
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
               <div class="d-flex flex-wrap gap-2 ms-lg-auto">
-                <button type="button" class="btn btn-primary">Start</button>
-                <button type="button" class="btn btn-outline-danger">
+                <button type="button" class="btn btn-primary" id="btn-start">
+                  Start
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-danger"
+                  id="btn-stop"
+                >
                   Stop
                 </button>
-                <button type="button" class="btn btn-outline-secondary">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="btn-retry"
+                >
                   Retry
                 </button>
               </div>
@@ -99,8 +119,27 @@
                 Press start to load a prompt and begin typing. Your timer will
                 begin with the first keystroke.
               </p>
-              <div class="p-3 border rounded bg-white-50 placeholder-area">
-                Test content will go here.
+              <div
+                class="p-3 border rounded bg-white-50 placeholder-area mb-3"
+                id="prompt-text"
+              >
+                Click start to load your prompt.
+              </div>
+              <label for="typing-input" class="form-label fw-semibold"
+                >Your typing area</label
+              >
+              <textarea
+                class="form-control"
+                id="typing-input"
+                rows="5"
+                placeholder="Start typing here..."
+                disabled
+              ></textarea>
+              <div
+                class="d-flex justify-content-between align-items-center mt-2 text-muted small"
+              >
+                <span id="status-text">Timer starts on first keystroke.</span>
+                <span id="live-timer" class="fw-semibold">0.00s</span>
               </div>
             </div>
           </div>
@@ -113,15 +152,15 @@
               <div class="d-flex flex-column gap-2 results-list">
                 <div class="d-flex justify-content-between align-items-center">
                   <span class="text-muted">Words per minute</span>
-                  <span class="fw-semibold">—</span>
+                  <span class="fw-semibold" id="stat-wpm">—</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span class="text-muted">Accuracy</span>
-                  <span class="fw-semibold">—</span>
+                  <span class="fw-semibold" id="stat-accuracy">—</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span class="text-muted">Time</span>
-                  <span class="fw-semibold">—</span>
+                  <span class="fw-semibold" id="stat-time">—</span>
                 </div>
               </div>
             </div>
@@ -136,5 +175,6 @@
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="script.js"></script>
   </body>
 </html>
